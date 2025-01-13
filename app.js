@@ -8,6 +8,8 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+//ROUTES
+//READ ALL HISAAB
 app.get("/", (req, res) => {
   fs.readdir("./hisaab", (err, files) => {
     if (err) return res.status(500).send("something went wrong");
@@ -20,6 +22,7 @@ app.get("/create", (req, res) => {
   res.status(200).render("create");
 });
 
+//CREATE HISAAB
 app.post("/createhisaab", (req, res) => {
   const currentDate = new Date();
   const date = `${currentDate.getDate()}-${
@@ -32,7 +35,7 @@ app.post("/createhisaab", (req, res) => {
     res.redirect("/");
   });
 });
-
+///READ HISAAB
 app.get("/hisaab/:filename", (req, res) => {
   fs.readFile("./hisaab/" + req.params.filename, "utf8", (err, data) => {
     if (err) return res.status(500).send("Something went wrong");
@@ -41,6 +44,7 @@ app.get("/hisaab/:filename", (req, res) => {
   });
 });
 
+//UPDATE HISAAB
 app.get("/edit/:filename", (req, res) => {
   fs.readFile("./hisaab/" + req.params.filename, "utf8", (err, data) => {
     if (err) return res.status(500).send("Something went wrong");
@@ -48,7 +52,7 @@ app.get("/edit/:filename", (req, res) => {
     res.status(200).render("edit", { data, filename: req.params.filename });
   });
 });
-
+//SUPMIT UPDATED HISAAB
 app.post("/update/:filename", (req, res) => {
   fs.writeFile(
     "./hisaab/" + req.params.filename.split(":")[1],
@@ -65,6 +69,7 @@ app.post("/update/:filename", (req, res) => {
     }
   );
 });
+//DELETE HISAAB
 app.get("/delete/:filename", (req, res) => {
   fs.unlink("./hisaab/" + req.params.filename, (err) => {
     if (err) return res.status(500).send("Something went wrong");
